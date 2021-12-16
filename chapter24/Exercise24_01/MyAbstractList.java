@@ -78,6 +78,7 @@ public abstract class MyAbstractList<E> implements MyList<E> {
 			for (int i = 0; i < size(); i++) {
 				if (!otherList.contains(get(i))) {
 					remove(i);
+					changed = true;
 				}
 			}
 		}
