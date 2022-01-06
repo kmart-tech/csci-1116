@@ -14,7 +14,6 @@ public class Exercise23_03 {
       System.out.print(list[i] + " ");
     }
 
-    /*
     System.out.println();
     Circle[] list1 = {new Circle(2), new Circle(3), new Circle(2),
                      new Circle(5), new Circle(6), new Circle(1), new Circle(2),
@@ -23,7 +22,7 @@ public class Exercise23_03 {
     for (int i = 0; i < list1.length; i++) {
       System.out.println(list1[i] + " ");
     }
-     */
+
   }
 
   public static <E extends Comparable<E>> void quickSort(E[] list) {
@@ -79,6 +78,55 @@ public class Exercise23_03 {
   }
 
   public static <E> void quickSort(E[] list, Comparator<? super E> comparator) {
-
+    quickSort(list, comparator, 0, list.length - 1);
   }
+
+  public static <E> void quickSort(E[] list, Comparator<? super E> comparator, int start, int end) {
+    if (end > start) {
+      int pivotIndex = partition(list, comparator, start, end);
+      quickSort(list, comparator, start, pivotIndex - 1);
+      quickSort(list, comparator, pivotIndex + 1, end);
+    }
+  }
+
+  public static <E> int partition(E[] list, Comparator<? super E> comparator, int start, int end) {
+    // choose a pivot (first element in list for now)
+    int pivotIndex = (int) (Math.random() * (end - start - 1)) + start;
+    E pivot = list[pivotIndex];
+    int low = start;
+    int high = end;
+
+    while (low < high) {
+      while (comparator.compare(list[low], pivot) <= 0 && low < high) {
+        low++;
+      }
+      while (comparator.compare(list[high], pivot) > 0 && low < high) {
+        high--;
+      }
+
+      //swap the chosen elements
+      if (high > low) {
+        E temp = list[low];
+        list[low] = list[high];
+        list[high] = temp;
+
+        if (pivotIndex == high) pivotIndex = low;
+      }
+    }
+
+    // move the pivot to be between the divided elements
+    if (comparator.compare(pivot, list[high]) > 0) {
+      list[pivotIndex] = list[high];
+      list[high] = pivot;
+      return high;
+    }
+    else if (comparator.compare(pivot, list[high]) < 0) {
+      high--;
+      list[pivotIndex] = list[high];
+      list[high] = pivot;
+      return high;
+    }
+    else return pivotIndex;
+  }
+
 }
